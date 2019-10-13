@@ -2,14 +2,33 @@
   "name": "assignment",
   "version": "1.0.0",
   "description": "Harbinger nodejs assignment",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "grunt",
+    "start": "nodemon --exec babel-node app.js"
   },
   "keywords": [
     "NodeJs",
     "assignment"
   ],
   "author": "Vijay Kerure",
-  "license": "ISC"
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.4",
+    "morgan": "^1.9.1",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "grunt": "^1.0.4",
+    "grunt-eslint": "^22.0.0",
+    "nodemon": "^1.19.3"
+  }
 }

@@ -6,6 +6,8 @@ const JWTstrategy = require('passport-jwt').Strategy;
 
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
+import JWT from 'jsonwebtoken';
+
 import bcrypt from 'bcryptjs';
 
 import { UserModel } from '../user/user-model';
@@ -55,4 +57,13 @@ const verifyToken = new JWTstrategy(
     }
 );
 
-module.exports = { signUpStrategy, loginStrategy, verifyToken };
+const signToken = (user) => {
+    return JWT.sign({
+        iss: 'node-assignment',
+        sub: user.id,
+        iat: new Date().getTime(), // Current Time
+        exp: new Date().setTime(new Date().getTime() + 1) // Current Time + 1 day ahead
+    }, 'secret_key');
+};
+
+module.exports = { signUpStrategy, loginStrategy, verifyToken, signToken };

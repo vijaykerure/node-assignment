@@ -1,31 +1,36 @@
 'use strict';
+import UserModel from '../user/user-model';
 
-import jwt from 'jsonwebtoken';
+const signUp = async(req, res, next) => {
+    let newUser = new UserModel(req.value.body);
 
-const signUp = async (request, response, next) => {
-    return response.formatter.ok(request.user, successMessage(CREATED_USER_SUCCESS));
-};
+    newUser = await newUser.save();
+    if(!newUser){
+        return next({status: 404});
+    }
+    return res.status(201).json({token: newUser, success: true});
+}
 
-
-const signIn = async (request, response, next) => {
-    const user = request.user;
+const signIn = async (req, res, next) => {
+    const user = req.user;
     try {
         if (!user) {
             const error = new Error('An Error occurred');
             return next(error);
         }
-        request.login(user, { session: false },
+        req.login(user, { session: false },
             async (error) => {
                 if (error) {
                     return next(error);
                 }
                 const body = { _id: user._id, email: user.email };
                 const token = jwt.sign({ user: body }, 'top_secret');
-                return response.formatter.ok({ token }, successMessage(LOGGED_USER_SUCCESS));
+                return res.status(200).json({ token });
+                //return res.formatter.ok({ token }, 'User loggedin successfully');
             }
         );
     } catch (error) {
-        return response.formatter.serverError(errorMessage(error.message));
+        return error.message;//res.formatter.serverError(error.message);
     }
 };
 

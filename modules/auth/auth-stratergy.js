@@ -43,22 +43,21 @@ const loginStrategy = new LocalStrategy(
     }
 );
 
-const verifyToken = new JWTstrategy({ 
-        issuer: 'node-assignment',
-        secretOrKey: 'secret_key', 
-        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
-    }, async (payload, done) => {
-        try {
-            const user = await UserModel.findOne({ _id: payload.sub });
-            if(user) {
-                return done(null, user);
-            }
-            return done(null,false);
-        } catch (error) {
-            done(error);
+const verifyToken = new JWTstrategy({
+    issuer: 'node-assignment',
+    secretOrKey: 'secret_key',
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+}, async (payload, done) => {
+    try {
+        const user = await UserModel.findOne({ _id: payload.sub });
+        if (user) {
+            return done(null, user);
         }
+        return done(null, false);
+    } catch (error) {
+        done(error);
     }
-);
+});
 
 const signToken = (user) => {
     return JWT.sign({

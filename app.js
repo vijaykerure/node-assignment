@@ -28,6 +28,8 @@ const port = 3000;
 // Parse http x-www-form-urlencoded variables
 app.use(bodyParser.urlencoded({extended: true}));
 
+
+
 app.use(passport.initialize());
 
 passport.use('signup', signUpStrategy);
@@ -38,10 +40,9 @@ passport.use(verifyToken);
 
 app.use('/api', router);
 
-// app.use('/', (req, res) => {
-//     res.status(200).json({message: 'hello' });
-// });
-
+app.use('/ping', (req, res) => {
+    res.status(200).send('ok');
+});
 
 app.listen(port, () => `Server running on port ${port}!`);
 

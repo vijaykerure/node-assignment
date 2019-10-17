@@ -1,5 +1,5 @@
 'use strict';
-import { genSalt, hash, compare, compareSync } from 'bcryptjs';
+import { genSalt, hash, compare } from 'bcryptjs';
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({    

@@ -1,5 +1,5 @@
 'use strict';
-import bcrypt from 'bcryptjs';
+import { genSalt, hash, compare, compareSync } from 'bcryptjs';
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({    
@@ -34,8 +34,8 @@ const UserSchema = new mongoose.Schema({
 // Hook - calls before save into collection
 UserSchema.pre('save', async function(next){
     try {
-        let salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
+        let salt = await genSalt(10);
+        this.password = await hash(this.password, salt);
         next();
     } catch (error) {
         next(error);
@@ -44,14 +44,9 @@ UserSchema.pre('save', async function(next){
 
 // Verify password hash
 UserSchema.methods.verifyPassword = async function(newPassword) {
-    try {
-        let result = await bcrypt.compare(newPassword, this.password);
-        return result;
-    } catch (error) {
-        throw new Error(error);
-    }
+    return await compare(newPassword, this.password);
 };
 
 const UserModel = mongoose.model('user', UserSchema);
 
-module.exports = { UserModel };
+export { UserModel };

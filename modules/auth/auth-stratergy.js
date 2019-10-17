@@ -8,8 +8,6 @@ const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 import JWT from 'jsonwebtoken';
 
-import bcrypt from 'bcryptjs';
-
 import { UserModel } from '../user/user-model';
 
 const signUpStrategy = new LocalStrategy(
@@ -17,7 +15,6 @@ const signUpStrategy = new LocalStrategy(
     async (email, password, done) => {
         try {
             let newUser = new UserModel({ email, password });
-            newUser.password = bcrypt.hashSync(password, 10);
             const user = await newUser.save();
             user.password = undefined;
             return done(null, user);
@@ -35,7 +32,7 @@ const loginStrategy = new LocalStrategy(
             if (!user) {
                 return done(null, false, { message: 'User not found' });
             }
-            const validate = await user.verifyPassword(password, user.password);
+            const validate = await user.verifyPassword(password);
             if (!validate) {
                 return done(null, false, { message: 'Wrong Password' });
             }
@@ -46,11 +43,17 @@ const loginStrategy = new LocalStrategy(
     }
 );
 
-const verifyToken = new JWTstrategy(
-    { secretOrKey: 'secret', jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken() },
-    async (token, done) => {
+const verifyToken = new JWTstrategy({ 
+        issuer: 'node-assignment',
+        secretOrKey: 'secret_key', 
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+    }, async (payload, done) => {
         try {
-            return done(null, token.user);
+            const user = await UserModel.findOne({ _id: payload.sub });
+            if(user) {
+                return done(null, user);
+            }
+            return done(null,false);
         } catch (error) {
             done(error);
         }

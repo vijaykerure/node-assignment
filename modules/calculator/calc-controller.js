@@ -1,13 +1,15 @@
 'use strict';
 
-const sum = (req, res) => {
-    const { x, y } = req.params;
-    return res.status(200).json({ sum: x + y});
+const sum = (...args) => {
+    let total = 0;
+    for (let arg of args) total += arg;
+    return total;
 };
 
-const multiply = (req, res) => {
-    const { x, y } = req.params;
-    return res.status(200).json({ multiplication: x * y });
+const multiply = (...args) => {
+    let total = 1;
+    for (let arg of args) total *= Number(arg);
+    return total;
 };
 
 export {

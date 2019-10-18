@@ -4,7 +4,7 @@
   "description": "Harbinger nodejs assignment",
   "main": "app.js",
   "scripts": {
-    "test": "nyc mocha test/*.* --require @babel/register --exit",
+    "test": "nyc mocha test/*.* --require @babel/register --except *-model.js --exit",
     "prestart": "grunt",
     "start": "nodemon --exec babel-node app.js"
   },

@@ -1,14 +1,14 @@
 'use strict';
 
-const LocalStrategy = require('passport-local').Strategy;
-
-const JWTstrategy = require('passport-jwt').Strategy;
-
-const ExtractJWT = require('passport-jwt').ExtractJwt;
-
+import PassportLocal from 'passport-local';
+import PassportJWT from 'passport-jwt';
 import JWT from 'jsonwebtoken';
-
 import { UserModel } from '../user/user-model';
+
+const LocalStrategy = PassportLocal.Strategy;
+const JWTstrategy = PassportJWT.Strategy;
+const ExtractJwt = PassportJWT.ExtractJwt;
+
 
 const signUpStrategy = new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
@@ -46,7 +46,7 @@ const loginStrategy = new LocalStrategy(
 const verifyToken = new JWTstrategy({
     issuer: 'node-assignment',
     secretOrKey: 'secret_key',
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 }, async (payload, done) => {
     try {
         const user = await UserModel.findOne({ _id: payload.sub });

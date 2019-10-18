@@ -4,9 +4,9 @@ import { sum, multiply } from './calc-controller';
 
 const calcRouter = express.Router();
 
-calcRouter.get('/sum/:x/:y', sum);
+calcRouter.get('/sum/:args', sum);
 
-calcRouter.route('/multiply/:x/:y')
+calcRouter.route('/multiply/:args')
     .get(multiply);
 
 export default calcRouter;

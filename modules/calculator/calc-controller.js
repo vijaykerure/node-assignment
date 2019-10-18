@@ -2,14 +2,14 @@
 
 const sum = (...args) => {
     let total = 0;
-    for (let arg of args) total += arg;
+    for (let arg of args) total += parseFloat(arg);
     return total;
 };
 
 const multiply = (...args) => {
     let total = 1;
-    for (let arg of args) total *= Number(arg);
-    return total;
+    for (let arg of args) total *= parseFloat(arg);
+    return total;  
 };
 
 export {

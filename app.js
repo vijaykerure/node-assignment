@@ -124,4 +124,7 @@ const setupServer = (isClusterRequired) => {
 
 setupServer(true);
 
-export default app;
+export { 
+    app,
+    setupServer
+};

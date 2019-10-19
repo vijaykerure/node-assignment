@@ -1,9 +1,13 @@
 import request from 'supertest';
-import app from '../app';
+import sinon from 'sinon';
+import * as server from '../app';
 
 
 describe('App Server', () => {
     it('Ping route', (done) => {
-        request(app).get('/ping').expect('ok').expect(200).end(done);
+        let setupServerSpy = sinon.spy(server, 'setupServer');
+        server.setupServer(false);
+        setupServerSpy.restore();
+        request(server.app).get('/ping').expect('ok').expect(200).end(done);
     });
 });
